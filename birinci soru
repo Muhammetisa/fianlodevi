@@ -1,0 +1,19 @@
+import numpy as np
+
+# Verilen dosyayı oku (örnek olarak rasgele bir matris oluşturulmuştur)
+image = np.random.randint(0, 256, size=(32, 32), dtype=np.uint8)
+
+# İlk olarak, min ve max değerlerini bul
+min_val = np.min(image)
+max_val = np.max(image)
+
+# Yeni minimum ve maksimum değerler belirle
+new_min = 0
+new_max = 255
+
+# Yeni değerleri hesapla ve matrise uygula
+output_image = ((image - min_val) * ((new_max - new_min) / (max_val - min_val))) + new_min
+output_image = output_image.astype(np.uint8)
+
+# Sonuç görüntüsünü yazdır
+print(output_image)
