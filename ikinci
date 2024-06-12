@@ -1,0 +1,45 @@
+mport numpy as np
+import matplotlib.pyplot as plt
+
+# Örnek histogram verisi (kendi verinizi buraya ekleyin)
+histogram = [0, 0, 1, 3, 5, 7, 9, 11, 10, 6, 4, 2, 1, 0, 0, 0]  # Bu kısmı kendi verinizle değiştirin
+bins = np.arange(len(histogram))
+
+# Başlangıç eşik değeri ve eşik farkı
+T0 = 100
+threshold = 1
+
+# Histogramı çiz
+plt.bar(bins, histogram, width=1.0, edgecolor='black')
+plt.xlabel('Yoğunluk Değerleri')
+plt.ylabel('Piksel Sayısı')
+plt.title('Görüntü Histogramı')
+plt.show()
+
+# Piksel değerlerini elde et
+pixels = np.repeat(bins, histogram)
+
+# Global eşikleme algoritması
+while True:
+    # T0 eşik değeri kullanarak grupları belirle
+    G1 = pixels[pixels > T0]
+    G2 = pixels[pixels <= T0]
+    
+    if len(G1) == 0 or len(G2) == 0:
+        print("Bir grup boş, algoritma durduruluyor.")
+        break
+
+    # G1 ve G2 gruplarının ortalama yoğunluk değerlerini hesapla
+    m1 = np.mean(G1)
+    m2 = np.mean(G2)
+    
+    # Yeni eşik değeri hesapla
+    T1 = (m1 + m2) / 2
+    
+    print(f"Güncel Eşik Değeri: {T1}")
+    
+    # Eşik değeri değişiminin threshold'dan küçük olup olmadığını kontrol et
+    if abs(T1 - T0) < threshold:
+        print(f"Optimum Eşik Değeri: {T1}")
+        break
+    else:
