@@ -1,0 +1,35 @@
+import matplotlib.pyplot as plt
+
+# Kontrast eşitleme fonksiyonu
+def contrast_equalization(image):
+    # Piksel değerlerini normalize et
+    normalized_image = (image - np.min(image)) / (np.max(image) - np.min(image))
+    
+    # Histogramı hesapla
+    hist, bins = np.histogram(normalized_image.flatten(), bins=256, range=(0,1))
+    cdf = hist.cumsum()
+    cdf = (cdf - cdf.min()) * 255 / (cdf.max() - cdf.min())
+    
+    # Eşitleme
+    equalized_image = np.interp(normalized_image.flatten(), bins[:-1], cdf)
+    
+    # Yeniden boyutlandır
+    equalized_image = equalized_image.reshape(image.shape)
+    
+    return equalized_image
+
+# Orjinal görüntüyü göster
+plt.figure(figsize=(8, 4))
+plt.subplot(1, 2, 1)
+plt.title("Orjinal Görüntü")
+plt.imshow(image_data, cmap='gray')
+
+# Kontrast eşitleme işlemini uygula ve adım adım göster
+equalized_image = contrast_equalization(image_data)
+plt.subplot(1, 2, 2)
+plt.title("Kontrast Eşitlenmiş Görüntü")
+plt.imshow(equalized_image, cmap='gray')
+
+# Görsel ayarları yap
+plt.tight_layout()
+plt.show()
